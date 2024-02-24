@@ -10,10 +10,9 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public class BookRepositoryImpl implements BookRepository {
-    public SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     @Autowired
     public BookRepositoryImpl(SessionFactory sessionFactory) {
