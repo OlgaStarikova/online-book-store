@@ -17,7 +17,7 @@ public class BookSpecificationProviderManager implements SpecificationProviderMa
         return bookSpecificationProviders.stream()
                 .filter(p -> p.getKey().equals(key))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Can't find correct specification " +
-                        "for key " + key));
+                .orElseThrow(() -> new RuntimeException("Can't find correct specification "
+                        + "for key " + key));
     }
 }
