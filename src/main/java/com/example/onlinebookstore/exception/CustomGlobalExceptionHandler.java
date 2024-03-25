@@ -1,5 +1,6 @@
 package com.example.onlinebookstore.exception;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -46,6 +47,16 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler({EntityNotFoundException.class})
     protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, Object> responseBody = new LinkedHashMap<>();
+        responseBody.put("timestamp", LocalDateTime.now());
+        responseBody.put("status", HttpStatus.BAD_REQUEST);
+        responseBody.put("error", ex.getMessage());
+        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({SQLIntegrityConstraintViolationException.class})
+    protected ResponseEntity<Object> handleSqlIntegrityConstraintViolationException(
+            SQLIntegrityConstraintViolationException ex) {
         Map<String, Object> responseBody = new LinkedHashMap<>();
         responseBody.put("timestamp", LocalDateTime.now());
         responseBody.put("status", HttpStatus.BAD_REQUEST);
