@@ -10,7 +10,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = IsbnValidator.class)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Isbn {
+public @interface
+Isbn {
     String message() default "Invalid format ISBN";
 
     Class<?>[] groups() default {};
