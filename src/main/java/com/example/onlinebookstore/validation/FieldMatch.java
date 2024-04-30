@@ -11,8 +11,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = FieldMatchValidator.class)
 @Target({ElementType.TYPE, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface
-FieldMatch {
+public @interface FieldMatch {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
@@ -22,7 +21,6 @@ FieldMatch {
     String second();
 
     String message() default "fields aren't matched";
-
 
     @Target({ElementType.PARAMETER, ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
