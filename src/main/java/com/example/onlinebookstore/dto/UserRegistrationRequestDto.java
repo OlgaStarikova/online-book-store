@@ -11,10 +11,10 @@ public record UserRegistrationRequestDto(
         @Email
         String email,
         @NotBlank
-        @Length(min = 8, max = 35)
+        @Length(min = 8, max = 254)
         String password,
         @NotBlank
-        @Length(min = 8, max = 35)
+        @Length(min = 8, max = 254)
         String repeatPassword,
         @NotBlank
         String firstName,

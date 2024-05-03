@@ -23,9 +23,6 @@ public class User {
     private String lastName;
     private String shippingAddress;
 
-    public User() {
-    }
-
     public Long getId() {
         return this.id;
     }

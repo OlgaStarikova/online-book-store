@@ -1,14 +1,11 @@
 package com.example.onlinebookstore.model;
 
-import com.example.onlinebookstore.validation.Isbn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -21,22 +18,18 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+    @Column(nullable = false)
     private String title;
-    @NotBlank
+    @Column(nullable = false)
     private String author;
     @Column(unique = true)
-    @Isbn
     private String isbn;
-    @Min(0)
+    @Column(nullable = false)
     private BigDecimal price;
     private String description;
     private String coverImage;
     @Column(nullable = false)
     private boolean isDeleted = false;
-
-    public Book() {
-    }
 
     public Long getId() {
         return this.id;
