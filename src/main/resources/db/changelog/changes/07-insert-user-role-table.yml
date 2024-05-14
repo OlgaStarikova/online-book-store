@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-user-role-table
+      id: insert-user-role-table
       author: Olya Starykova
       changes:
         - insert:
