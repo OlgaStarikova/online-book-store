@@ -36,7 +36,6 @@ public class AuthenticationController {
             + " a user for a access to data")
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
-        String string = "w";
         return authenticationService.authenticate(requestDto);
     }
 }
