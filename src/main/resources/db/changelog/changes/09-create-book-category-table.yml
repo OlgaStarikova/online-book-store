@@ -14,8 +14,6 @@ databaseChangeLog:
                     referencedTableName: books
                     referencedColumnNames: id
                     nullable: false
-                    unique: true
-                    uniqueConstraintName: book_id-category_id_unique
               - column:
                   name: category_id
                   type: bigint
@@ -24,5 +22,3 @@ databaseChangeLog:
                     referencedTableName: categories
                     referencedColumnNames: id
                     nullable: false
-                    unique: true
-                    uniqueConstraintName: book_id-category_id_unique
