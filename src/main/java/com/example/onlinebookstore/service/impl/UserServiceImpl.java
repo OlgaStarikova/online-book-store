@@ -7,9 +7,9 @@ import com.example.onlinebookstore.mapper.UserMapper;
 import com.example.onlinebookstore.model.Role;
 import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
-import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.repository.role.RoleRepository;
 import com.example.onlinebookstore.repository.user.UserRepository;
+import com.example.onlinebookstore.service.CartService;
 import com.example.onlinebookstore.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final ShoppingCartRepository cartRepository;
+    private final CartService cartService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
         ShoppingCart cart = new ShoppingCart();
         cart.setUser(savedUser);
-        cartRepository.save(cart);
+        cartService.createShoppingCart(cart);
         return userMapper.toDto(savedUser);
     }
 }

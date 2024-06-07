@@ -1,6 +1,5 @@
 package com.example.onlinebookstore.controller;
 
-import com.example.onlinebookstore.dto.CartItemDto;
 import com.example.onlinebookstore.dto.CreateCartItemRequestDto;
 import com.example.onlinebookstore.dto.ShoppingCartDto;
 import com.example.onlinebookstore.dto.UpdateCartItemRequestDto;
@@ -39,7 +38,7 @@ public class ShoppingCartController {
     @Operation(summary = "Create a new cartItem", description = "Create a new cartItem. "
             + "Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")
-    public CartItemDto createCart(@RequestBody @Valid CreateCartItemRequestDto requestDto) {
+    public ShoppingCartDto createCart(@RequestBody @Valid CreateCartItemRequestDto requestDto) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         return cartService.save(userName, requestDto);
     }
@@ -57,8 +56,9 @@ public class ShoppingCartController {
     @Operation(summary = "Update the cart item", description = "Update the cart item by Id."
             + "Params: id = Id of the cart item. Available for users.")
     @PreAuthorize("hasAuthority('USER')")
-    public CartItemDto updateCartItem(@PathVariable Long id,
+    public ShoppingCartDto updateCartItem(@PathVariable Long id,
                                       @RequestBody @Valid UpdateCartItemRequestDto requestDto) {
-        return cartService.update(id, requestDto);
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cartService.update(userName, id, requestDto);
     }
 }

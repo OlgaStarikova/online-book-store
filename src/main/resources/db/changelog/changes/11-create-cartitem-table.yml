@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-cartitems-table
+      id: create-cart-items-table
       author: Olya Starykova
       changes:
         - createTable:
-            tableName: cartitems
+            tableName: cart_items
             columns:
               - column:
                   name: id
@@ -17,15 +17,15 @@ databaseChangeLog:
                   name: cart_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_cartitems_shoppingcarts
-                    referencedTableName: shoppingcarts
+                    foreignKeyName: fk_cart_items_shopping_carts
+                    referencedTableName: shopping_carts
                     referencedColumnNames: id
                     nullable: false
               - column:
                   name: book_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_cartitems_books
+                    foreignKeyName: fk_cart_items_books
                     referencedTableName: books
                     referencedColumnNames: id
                     nullable: false

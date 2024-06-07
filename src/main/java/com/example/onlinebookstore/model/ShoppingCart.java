@@ -1,7 +1,9 @@
 package com.example.onlinebookstore.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,15 +22,15 @@ import org.hibernate.annotations.SQLRestriction;
 @Setter
 @SQLDelete(sql = "UPDATE shoppingcarts SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
-@Table(name = "shoppingcarts")
+@Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false,name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "shoppingCart")
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> cartItems;
     @Column(nullable = false)
     private boolean isDeleted = false;

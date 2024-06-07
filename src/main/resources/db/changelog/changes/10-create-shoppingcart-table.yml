@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-shoppingcart-table
+      id: create-shopping-cart-table
       author: Starykova Olga
       changes:
         - createTable:
-            tableName: shoppingcarts
+            tableName: shopping_carts
             columns:
               - column:
                   name: id
@@ -17,7 +17,7 @@ databaseChangeLog:
                   name: user_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_shoppingcarts_users
+                    foreignKeyName: fk_shopping_carts_users
                     referencedTableName: users
                     referencedColumnNames: id
                     nullable: false
