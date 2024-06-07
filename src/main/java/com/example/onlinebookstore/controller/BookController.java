@@ -53,7 +53,6 @@ public class BookController {
             + "Available for admins.")
     @PreAuthorize("hasAuthority('ADMIN')")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
-        String string = requestDto.getAuthor();
         return bookService.save(requestDto);
     }
 
