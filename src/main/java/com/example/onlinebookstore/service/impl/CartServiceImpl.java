@@ -4,10 +4,12 @@ import com.example.onlinebookstore.dto.CreateCartItemRequestDto;
 import com.example.onlinebookstore.dto.ShoppingCartDto;
 import com.example.onlinebookstore.dto.UpdateCartItemRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
+import com.example.onlinebookstore.mapper.CartItemMapper;
 import com.example.onlinebookstore.mapper.ShoppingCartMapper;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.model.CartItem;
 import com.example.onlinebookstore.model.ShoppingCart;
+import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.CartItemRepository;
 import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.repository.book.BookRepository;
@@ -23,7 +25,8 @@ import org.springframework.stereotype.Service;
 public class CartServiceImpl implements CartService {
     private final BookRepository bookRepository;
     private final CartItemRepository cartItemRepository;
-    private final ShoppingCartRepository shoppingCartRepository;
+    private final ShoppingCartRepository cartRepository;
+    private final CartItemMapper cartItemMapper;
     private final ShoppingCartMapper cartMapper;
     private final UserRepository userRepository;
 
@@ -41,7 +44,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setQuantity(cartItem.getQuantity() + requestDto.quantity());
             cartItemRepository.save(cartItem);
         } else {
-            CartItem cartItem = cartMapper.toCartItemModel(requestDto);
+            CartItem cartItem = cartItemMapper.toCartItemModel(requestDto);
             cartItem.setShoppingCart(shoppingCart);
             cartItem.setBook(book);
             cartItemRepository.save(cartItem);
@@ -52,12 +55,17 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ShoppingCartDto update(String email, Long id, UpdateCartItemRequestDto requestDto) {
-        CartItem cartItem = cartItemRepository.findById(id)
+    public ShoppingCartDto update(String email, Long cartItemId,
+                                  UpdateCartItemRequestDto requestDto) {
+        ShoppingCart cart = findShoppingCartByUserEmail(email);
+        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(cartItemId, cart.getId())
+                .map(item -> {
+                    item.setQuantity(requestDto.quantity());
+                    return item;
+                })
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No such a cartItem with id: " + id
+                        "No such a cartItem with id: " + cartItemId
                 ));
-        cartMapper.updateCartItemFromDto(requestDto, cartItem);
         cartItemRepository.save(cartItem);
         return cartMapper.toShoppingCartDto(findShoppingCartByUserEmail(email));
     }
@@ -72,8 +80,10 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ShoppingCart createShoppingCart(ShoppingCart shoppingCart) {
-        return shoppingCartRepository.save(shoppingCart);
+    public void createShoppingCart(User user) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(user);
+        cartRepository.save(shoppingCart);
     }
 
     @Override
@@ -81,6 +91,6 @@ public class CartServiceImpl implements CartService {
         Long userId = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User with email" + email + "is not found")).getId();
-        return shoppingCartRepository.findShoppingCartByUserId(userId);
+        return cartRepository.findShoppingCartByUserId(userId);
     }
 }

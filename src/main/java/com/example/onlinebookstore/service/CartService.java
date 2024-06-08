@@ -4,6 +4,7 @@ import com.example.onlinebookstore.dto.CreateCartItemRequestDto;
 import com.example.onlinebookstore.dto.ShoppingCartDto;
 import com.example.onlinebookstore.dto.UpdateCartItemRequestDto;
 import com.example.onlinebookstore.model.ShoppingCart;
+import com.example.onlinebookstore.model.User;
 
 public interface CartService {
     ShoppingCartDto save(String email, CreateCartItemRequestDto requestDto);
@@ -15,7 +16,7 @@ public interface CartService {
 
     ShoppingCartDto getShoppingCartByUserEmail(String email);
 
-    ShoppingCart createShoppingCart(ShoppingCart shoppingCart);
+    void createShoppingCart(User user);
 
     ShoppingCart findShoppingCartByUserEmail(String email);
 }
