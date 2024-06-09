@@ -29,6 +29,9 @@ public class ShoppingCartController {
     private final CartService cartService;
 
     @GetMapping
+    @Operation(summary = "Get the shopping cart ", description = "Get the Shopping cart "
+            + "with cart items .Available for registered users.")
+    @PreAuthorize("hasAuthority('USER')")
     public ShoppingCartDto getShoppingCart() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         return cartService.getShoppingCartByUserEmail(userName);
@@ -57,7 +60,7 @@ public class ShoppingCartController {
             + "Params: id = Id of the cart item. Available for users.")
     @PreAuthorize("hasAuthority('USER')")
     public ShoppingCartDto updateCartItem(@PathVariable Long id,
-                                      @RequestBody @Valid UpdateCartItemRequestDto requestDto) {
+                                          @RequestBody @Valid UpdateCartItemRequestDto requestDto) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         return cartService.update(userName, id, requestDto);
     }

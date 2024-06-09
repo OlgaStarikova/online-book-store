@@ -3,7 +3,6 @@ package com.example.onlinebookstore.service;
 import com.example.onlinebookstore.dto.CreateCartItemRequestDto;
 import com.example.onlinebookstore.dto.ShoppingCartDto;
 import com.example.onlinebookstore.dto.UpdateCartItemRequestDto;
-import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 
 public interface CartService {
@@ -17,6 +16,4 @@ public interface CartService {
     ShoppingCartDto getShoppingCartByUserEmail(String email);
 
     void createShoppingCart(User user);
-
-    ShoppingCart findShoppingCartByUserEmail(String email);
 }

@@ -86,8 +86,7 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(shoppingCart);
     }
 
-    @Override
-    public ShoppingCart findShoppingCartByUserEmail(String email) {
+    private ShoppingCart findShoppingCartByUserEmail(String email) {
         Long userId = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User with email" + email + "is not found")).getId();
