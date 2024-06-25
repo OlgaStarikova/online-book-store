@@ -4,7 +4,7 @@ import com.example.onlinebookstore.config.MapperConfig;
 import com.example.onlinebookstore.dto.OrderItemDto;
 import com.example.onlinebookstore.model.CartItem;
 import com.example.onlinebookstore.model.OrderItem;
-import java.util.Set;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,7 +14,7 @@ public interface OrderItemMapper {
     OrderItemDto toOrderItemDto(OrderItem orderItem);
 
     @Mapping(source = "book.id", target = "bookId")
-    Set<OrderItemDto> toOrderItemDtos(Set<OrderItem> orderItems);
+    List<OrderItemDto> toOrderItemDtos(List<OrderItem> orderItems);
 
     @Mapping(target = "id", ignore = true)
     OrderItem toOrderItemFromCartItem(CartItem cartItem);

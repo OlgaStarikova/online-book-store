@@ -3,6 +3,7 @@ package com.example.onlinebookstore.controller;
 import com.example.onlinebookstore.dto.CreateCartItemRequestDto;
 import com.example.onlinebookstore.dto.ShoppingCartDto;
 import com.example.onlinebookstore.dto.UpdateCartItemRequestDto;
+import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,18 +33,19 @@ public class ShoppingCartController {
     @Operation(summary = "Get the shopping cart ", description = "Get the Shopping cart "
             + "with cart items .Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")
-    public ShoppingCartDto getShoppingCart() {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return cartService.getShoppingCartByUserEmail(userName);
+    public ShoppingCartDto getShoppingCart(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return cartService.getShoppingCartByUser(user);
     }
 
     @PostMapping
     @Operation(summary = "Create a new cartItem", description = "Create a new cartItem. "
             + "Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")
-    public ShoppingCartDto createCart(@RequestBody @Valid CreateCartItemRequestDto requestDto) {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return cartService.save(userName, requestDto);
+    public ShoppingCartDto createCart(Authentication authentication,
+                                      @RequestBody @Valid CreateCartItemRequestDto requestDto) {
+        User user = (User) authentication.getPrincipal();
+        return cartService.save(user, requestDto);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -59,9 +61,11 @@ public class ShoppingCartController {
     @Operation(summary = "Update the cart item", description = "Update the cart item by Id."
             + "Params: id = Id of the cart item. Available for users.")
     @PreAuthorize("hasAuthority('USER')")
-    public ShoppingCartDto updateCartItem(@PathVariable Long id,
-                                          @RequestBody @Valid UpdateCartItemRequestDto requestDto) {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return cartService.update(userName, id, requestDto);
+    public ShoppingCartDto updateCartItem(Authentication authentication,
+                                          @PathVariable Long id,
+                                          @RequestBody @Valid
+                                          UpdateCartItemRequestDto requestDto) {
+        User user = (User) authentication.getPrincipal();
+        return cartService.update(user, id, requestDto);
     }
 }

@@ -4,24 +4,24 @@ import com.example.onlinebookstore.dto.CreateOrderRequestDto;
 import com.example.onlinebookstore.dto.OrderDto;
 import com.example.onlinebookstore.dto.OrderItemDto;
 import com.example.onlinebookstore.dto.UpdateOrderRequestDto;
+import com.example.onlinebookstore.exception.OrderProcessingException;
 import com.example.onlinebookstore.mapper.OrderItemMapper;
 import com.example.onlinebookstore.mapper.OrderMapper;
 import com.example.onlinebookstore.model.Order;
-import com.example.onlinebookstore.model.OrderItem;
+import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
+import com.example.onlinebookstore.repository.CartItemRepository;
 import com.example.onlinebookstore.repository.OrderItemRepository;
 import com.example.onlinebookstore.repository.OrderRepository;
 import com.example.onlinebookstore.repository.ShoppingCartRepository;
-import com.example.onlinebookstore.repository.user.UserRepository;
-import com.example.onlinebookstore.service.CartService;
 import com.example.onlinebookstore.service.OrderService;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,58 +30,27 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
-    private final UserRepository userRepository;
     private final ShoppingCartRepository cartRepository;
-    private final CartService cartService;
+    private final CartItemRepository cartItemRepository;
 
     @Override
-    public OrderDto save(String email, CreateOrderRequestDto requestDto) {
-        Order order = new Order();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "User with email" + email + "is not found"));
-        order.setUser(user);
-        order.setShippingAddress(requestDto.shippingAddress());
+    @Transactional
+    public OrderDto save(User user, CreateOrderRequestDto requestDto) {
+        ShoppingCart cart = cartRepository.findShoppingCartByUserId(user.getId());
+        if (cart.getCartItems().isEmpty()) {
+            throw new OrderProcessingException("Cart is empty for user: " + user.getEmail());
+        }
+        Order order = orderMapper.cartToOrder(cart, requestDto.shippingAddress());
         order.setStatus(Order.Status.PENDING);
-        order.setTotal(BigDecimal.valueOf(0.00));
         order.setOrderDate(LocalDateTime.now());
+        order.getOrderItems().replaceAll(i -> {
+            i.setOrder(order);
+            return i;
+        });
         Order orderSaved = orderRepository.save(order);
-        Order orderWithItems = createOrderItems(orderSaved, user);
-        orderWithItems.setTotal(countTotalSumOrder(orderWithItems));
-        orderRepository.save(orderWithItems);
-        cartRepository.delete(cartRepository
-                .findShoppingCartByUserId(user.getId()));
-        cartService.createShoppingCart(user);
-        return orderMapper.toOrderDto(orderWithItems);
-    }
-
-    private Order createOrderItems(Order order, User user) {
-        Set<OrderItem> orderItems = cartRepository
-                .findShoppingCartByUserId(user.getId())
-                .getCartItems()
-                .stream()
-                .map(cartItem -> {
-                    OrderItem orderItem =
-                            orderItemMapper.toOrderItemFromCartItem(cartItem);
-                    orderItem.setOrder(order);
-                    orderItem.setPrice(cartItem.getBook().getPrice());
-                    return orderItem;
-                })
-                .collect(Collectors.toSet());
-        orderItemRepository.saveAll(orderItems);
-        order.setOrderItems(orderItems);
-        return order;
-    }
-
-    private BigDecimal countTotalSumOrder(Order order) {
-        BigDecimal total = order.getOrderItems()
-                .stream()
-                .map(o -> {
-                    return o.getPrice()
-                            .multiply(new BigDecimal(o.getQuantity()));
-                })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return total;
+        cartItemRepository.deleteAllByShoppingCartId(cart.getId());
+        cart.clearCart();
+        return orderMapper.toOrderDto(orderSaved);
     }
 
     @Override
@@ -95,30 +64,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Set<OrderDto> getOrdersByUserEmail(String email) {
-        return orderMapper.toOrdersDto(findOrdersByUserEmail(email));
+    public List<OrderDto> getOrdersByUser(User user, Pageable pageable) {
+        List<OrderDto> orderDtos = orderMapper.toOrdersDto(
+                orderRepository.findOrdersByUserId(user.getId(), pageable));
+        return orderDtos;
     }
 
     @Override
-    public Set<OrderItemDto> getOrderItems(Long id) {
+    public List<OrderItemDto> getOrderItems(User user, Long orderId) {
+        Order order = orderRepository.findOrdersByIdAndUserId(orderId, user.getId())
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "Order with id = " + orderId + "is not found"
+                                + "for user " + user.getEmail()));
         return orderItemMapper.toOrderItemDtos(
-                orderItemRepository.findOrderItemsByOrder_Id(id));
+                orderItemRepository.findOrderItemsByOrder_Id(order.getId()));
     }
 
     @Override
-    public OrderItemDto getOrderItem(Long orderId, Long itemId) {
+    public OrderItemDto getOrderItem(User user, Long orderId, Long itemId) {
+        Order order = orderRepository.findOrdersByIdAndUserId(orderId, user.getId())
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "Order with id = " + orderId + "is not found"
+                                + "for user " + user.getEmail()));
         return orderItemMapper.toOrderItemDto(
-                orderItemRepository.findByIdAndOrderId(itemId, orderId)
+                orderItemRepository.findByIdAndOrderId(itemId, order.getId())
                         .orElseThrow(() -> new UsernameNotFoundException(
                                 "OrderItem with id = " + itemId + "is not found"
                                         + " for order with id = " + orderId))
         );
-    }
-
-    private Set<Order> findOrdersByUserEmail(String email) {
-        Long userId = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "User with email" + email + "is not found")).getId();
-        return orderRepository.findOrdersByUserId(userId);
     }
 }

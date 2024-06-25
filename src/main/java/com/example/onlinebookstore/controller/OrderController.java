@@ -4,14 +4,18 @@ import com.example.onlinebookstore.dto.CreateOrderRequestDto;
 import com.example.onlinebookstore.dto.OrderDto;
 import com.example.onlinebookstore.dto.OrderItemDto;
 import com.example.onlinebookstore.dto.UpdateOrderRequestDto;
+import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.Set;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,18 +35,20 @@ public class OrderController {
     @Operation(summary = "Get orders for current user ", description = "Get orders"
             + "with order items. Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")
-    public Set<OrderDto> getOrders() {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return orderService.getOrdersByUserEmail(userName);
+    public List<OrderDto> getOrders(Authentication authentication,
+                                    @ParameterObject @PageableDefault Pageable pageable) {
+        User user = (User) authentication.getPrincipal();
+        return orderService.getOrdersByUser(user, pageable);
     }
 
     @PostMapping
     @Operation(summary = "Create a new Order", description = "Create a new order. "
             + "Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")
-    public OrderDto createOrder(@RequestBody @Valid CreateOrderRequestDto requestDto) {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        return orderService.save(userName, requestDto);
+    public OrderDto createOrder(Authentication authentication,
+                                @RequestBody @Valid CreateOrderRequestDto requestDto) {
+        User user = (User) authentication.getPrincipal();
+        return orderService.save(user, requestDto);
     }
 
     @PatchMapping("/{id}")
@@ -51,7 +57,6 @@ public class OrderController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public OrderDto updateOrderStatus(@PathVariable Long id,
                                       @RequestBody @Valid UpdateOrderRequestDto requestDto) {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         return orderService.update(id, requestDto);
     }
 
@@ -59,15 +64,19 @@ public class OrderController {
     @Operation(summary = "Get order items for current order ", description = "Get order items"
             + "for current order. Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")
-    public Set<OrderItemDto> getOrderItems(@PathVariable Long id) {
-        return orderService.getOrderItems(id);
+    public List<OrderItemDto> getOrderItems(Authentication authentication,
+                                            @PathVariable Long orderId) {
+        User user = (User) authentication.getPrincipal();
+        return orderService.getOrderItems(user, orderId);
     }
 
     @GetMapping("/{orderId}/items/{itemId}")
     @Operation(summary = "Get order items for current order ", description = "Get order items"
             + "for current order. Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")
-    public OrderItemDto getOrderItem(@PathVariable Long orderId, @PathVariable Long itemId) {
-        return orderService.getOrderItem(orderId, itemId);
+    public OrderItemDto getOrderItem(Authentication authentication,
+                                     @PathVariable Long orderId, @PathVariable Long itemId) {
+        User user = (User) authentication.getPrincipal();
+        return orderService.getOrderItem(user, orderId, itemId);
     }
 }

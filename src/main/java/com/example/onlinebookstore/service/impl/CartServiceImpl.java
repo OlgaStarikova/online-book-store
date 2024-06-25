@@ -17,7 +17,6 @@ import com.example.onlinebookstore.repository.user.UserRepository;
 import com.example.onlinebookstore.service.CartService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -31,11 +30,11 @@ public class CartServiceImpl implements CartService {
     private final UserRepository userRepository;
 
     @Override
-    public ShoppingCartDto save(String email, CreateCartItemRequestDto requestDto) {
+    public ShoppingCartDto save(User user, CreateCartItemRequestDto requestDto) {
         Book book = bookRepository.findById(requestDto.bookId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "No such book with id: " + requestDto.bookId()));
-        ShoppingCart shoppingCart = findShoppingCartByUserEmail(email);
+        ShoppingCart shoppingCart = cartRepository.findShoppingCartByUserId(user.getId());
         Optional<CartItem> cartItemExists = shoppingCart.getCartItems().stream()
                 .filter(cartItem -> cartItem.getBook().equals(book))
                 .findFirst();
@@ -55,9 +54,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ShoppingCartDto update(String email, Long cartItemId,
+    public ShoppingCartDto update(User user, Long cartItemId,
                                   UpdateCartItemRequestDto requestDto) {
-        ShoppingCart cart = findShoppingCartByUserEmail(email);
+        ShoppingCart cart = cartRepository.findShoppingCartByUserId(user.getId());
         CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(cartItemId, cart.getId())
                 .map(item -> {
                     item.setQuantity(requestDto.quantity());
@@ -67,7 +66,7 @@ public class CartServiceImpl implements CartService {
                         "No such a cartItem with id: " + cartItemId
                 ));
         cartItemRepository.save(cartItem);
-        return cartMapper.toShoppingCartDto(findShoppingCartByUserEmail(email));
+        return cartMapper.toShoppingCartDto(cartRepository.findShoppingCartByUserId(user.getId()));
     }
 
     @Override
@@ -75,8 +74,9 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.deleteById(id);
     }
 
-    public ShoppingCartDto getShoppingCartByUserEmail(String email) {
-        return cartMapper.toShoppingCartDto(findShoppingCartByUserEmail(email));
+    public ShoppingCartDto getShoppingCartByUser(User user) {
+        return cartMapper.toShoppingCartDto(
+                cartRepository.findShoppingCartByUserId(user.getId()));
     }
 
     @Override
@@ -84,12 +84,5 @@ public class CartServiceImpl implements CartService {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
         cartRepository.save(shoppingCart);
-    }
-
-    private ShoppingCart findShoppingCartByUserEmail(String email) {
-        Long userId = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "User with email" + email + "is not found")).getId();
-        return cartRepository.findShoppingCartByUserId(userId);
     }
 }
