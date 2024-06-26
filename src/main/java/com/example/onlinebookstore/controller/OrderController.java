@@ -51,16 +51,16 @@ public class OrderController {
         return orderService.save(user, requestDto);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{orderId}")
     @Operation(summary = "Update the order status", description = "Update the order by Id."
             + "Params: id = Id of the order. Available for users.")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public OrderDto updateOrderStatus(@PathVariable Long id,
+    public OrderDto updateOrderStatus(@PathVariable Long orderId,
                                       @RequestBody @Valid UpdateOrderRequestDto requestDto) {
-        return orderService.update(id, requestDto);
+        return orderService.update(orderId, requestDto);
     }
 
-    @GetMapping("/{id}/items")
+    @GetMapping("/{orderId}/items")
     @Operation(summary = "Get order items for current order ", description = "Get order items"
             + "for current order. Available for registered users.")
     @PreAuthorize("hasAuthority('USER')")

@@ -4,10 +4,12 @@ import com.example.onlinebookstore.dto.CreateOrderRequestDto;
 import com.example.onlinebookstore.dto.OrderDto;
 import com.example.onlinebookstore.dto.OrderItemDto;
 import com.example.onlinebookstore.dto.UpdateOrderRequestDto;
+import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.exception.OrderProcessingException;
 import com.example.onlinebookstore.mapper.OrderItemMapper;
 import com.example.onlinebookstore.mapper.OrderMapper;
 import com.example.onlinebookstore.model.Order;
+import com.example.onlinebookstore.model.OrderItem;
 import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.CartItemRepository;
@@ -54,11 +56,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto update(Long id, UpdateOrderRequestDto updateOrderRequestDto) {
-        Order order = orderRepository.findById(id)
+    public OrderDto update(Long orderId, UpdateOrderRequestDto updateOrderRequestDto) {
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        "Order with id" + id + "is not found"));
-        order.setStatus(updateOrderRequestDto.status());
+                        "Order with id" + orderId + "is not found"));
+        order.setStatus(Order.Status.valueOf(updateOrderRequestDto.status()));
         orderRepository.save(order);
         return orderMapper.toOrderDto(order);
     }
@@ -72,25 +74,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderItemDto> getOrderItems(User user, Long orderId) {
-        Order order = orderRepository.findOrdersByIdAndUserId(orderId, user.getId())
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "Order with id = " + orderId + "is not found"
-                                + "for user " + user.getEmail()));
         return orderItemMapper.toOrderItemDtos(
-                orderItemRepository.findOrderItemsByOrder_Id(order.getId()));
+                orderItemRepository.findOrderItemsByOrderIdAndUserId(orderId, user.getId()));
     }
 
     @Override
     public OrderItemDto getOrderItem(User user, Long orderId, Long itemId) {
-        Order order = orderRepository.findOrdersByIdAndUserId(orderId, user.getId())
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "Order with id = " + orderId + "is not found"
-                                + "for user " + user.getEmail()));
-        return orderItemMapper.toOrderItemDto(
-                orderItemRepository.findByIdAndOrderId(itemId, order.getId())
-                        .orElseThrow(() -> new UsernameNotFoundException(
-                                "OrderItem with id = " + itemId + "is not found"
-                                        + " for order with id = " + orderId))
-        );
+        OrderItem orderIem = orderItemRepository
+                .findByIdAndOrderIdAndUserId(itemId, orderId, user.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "OrderItem is not found"
+                                + " for itemId = " + itemId + " and "
+                                + " order with orderId = " + orderId + " and "
+                                + " user with email = " + user.getEmail()));
+        return orderItemMapper.toOrderItemDto(orderIem);
     }
 }
