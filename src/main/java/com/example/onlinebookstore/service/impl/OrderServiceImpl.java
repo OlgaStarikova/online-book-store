@@ -17,7 +17,6 @@ import com.example.onlinebookstore.repository.OrderItemRepository;
 import com.example.onlinebookstore.repository.OrderRepository;
 import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.service.OrderService;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -43,8 +42,6 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderProcessingException("Cart is empty for user: " + user.getEmail());
         }
         Order order = orderMapper.cartToOrder(cart, requestDto.shippingAddress());
-        order.setStatus(Order.Status.PENDING);
-        order.setOrderDate(LocalDateTime.now());
         order.getOrderItems().replaceAll(i -> {
             i.setOrder(order);
             return i;
@@ -67,9 +64,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrdersByUser(User user, Pageable pageable) {
-        List<OrderDto> orderDtos = orderMapper.toOrdersDto(
+        return orderMapper.toOrdersDto(
                 orderRepository.findOrdersByUserId(user.getId(), pageable));
-        return orderDtos;
     }
 
     @Override

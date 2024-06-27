@@ -20,6 +20,7 @@ public interface OrderMapper {
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "orderItems", target = "orderItemDtos")
+    @Mapping(source = "status", target = "status", qualifiedByName = "status")
     OrderDto toOrderDto(Order order);
 
     @Mapping(source = "user.id", target = "userId")
@@ -42,6 +43,11 @@ public interface OrderMapper {
     @Named("price")
     default BigDecimal getPrice(CartItem cartItem) {
         return cartItem.getBook().getPrice();
+    }
+
+    @Named("status")
+    default String getStatus(Order.Status status) {
+        return status.toString();
     }
 
     @Named("orderItemFromCartItem")
