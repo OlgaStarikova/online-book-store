@@ -6,14 +6,14 @@ import com.example.onlinebookstore.dto.UpdateCartItemRequestDto;
 import com.example.onlinebookstore.model.User;
 
 public interface CartService {
-    ShoppingCartDto save(String email, CreateCartItemRequestDto requestDto);
+    ShoppingCartDto save(User user, CreateCartItemRequestDto requestDto);
 
     ShoppingCartDto update(
-            String email, Long id, UpdateCartItemRequestDto updateCartItemRequestDto);
+            User user, Long id, UpdateCartItemRequestDto updateCartItemRequestDto);
 
     void deleteById(Long id);
 
-    ShoppingCartDto getShoppingCartByUserEmail(String email);
+    ShoppingCartDto getShoppingCartByUser(User user);
 
     void createShoppingCart(User user);
 }
