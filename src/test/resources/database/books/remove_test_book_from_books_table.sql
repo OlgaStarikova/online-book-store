@@ -1,0 +1,1 @@
+DELETE FROM books WHERE isbn = 'ISBN 978-5-901202-50-5';
