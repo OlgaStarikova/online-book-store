@@ -2,6 +2,7 @@ package com.example.onlinebookstore.repository.book;
 
 import com.example.onlinebookstore.model.Book;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             + "bc.book_id "
             + "WHERE bc.category_id = :id", nativeQuery = true)
     List<Book> findBooksByCategoriesId(Long id);
+
+    @Override
+    Optional<Book> findById(Long bookId);
 }

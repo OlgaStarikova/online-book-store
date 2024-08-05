@@ -80,6 +80,6 @@ public class BookController {
     @PreAuthorize("hasAuthority('USER')")
     public List<BookDto> search(BookSearchParameters searchParameters,
                                 @ParameterObject @PageableDefault Pageable pageable) {
-        return bookService.search(searchParameters);
+        return bookService.search(searchParameters, pageable);
     }
 }
