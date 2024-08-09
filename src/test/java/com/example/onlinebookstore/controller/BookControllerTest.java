@@ -1,5 +1,8 @@
 package com.example.onlinebookstore.controller;
 
+import static com.example.onlinebookstore.utils.TestDataUtil.getTestBookDto;
+import static com.example.onlinebookstore.utils.TestDataUtil.getTestBookDtoNew;
+import static com.example.onlinebookstore.utils.TestDataUtil.getTestCreateBookRequestDtoNew;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -8,12 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.onlinebookstore.dto.BookDto;
 import com.example.onlinebookstore.dto.CreateBookRequestDto;
+import com.example.onlinebookstore.utils.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
@@ -35,15 +36,8 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookControllerTest {
-    protected static MockMvc mockMvc;
-    private static final Long TEST_BOOK_ID = 1L;
-    private static final String TEST_BOOK_TITLE = "Test Book 1";
-    private static final String TEST_BOOK_AUTHOR = "Test Author 1";
-    private static final String TEST_BOOK_ISBN = "ISBN 978-5-901202-50-5";
-    private static final String TEST_BOOK_ISBN_NEW = "ISBN 978-5-901202-50-6";
-    private static final BigDecimal TEST_BOOK_PRICE = BigDecimal.valueOf(20);
-    private static final String TEST_BOOK_DESCRIPTION = "Test Description";
-    private static final String TEST_BOOK_COVER_URL = "url://testbook_cover.jpg";
+    private static MockMvc mockMvc;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -79,25 +73,8 @@ public class BookControllerTest {
             Test save method, valid result
             """)
     public void save_validRequestDto_ok() throws Exception {
-        CreateBookRequestDto requestDto = new CreateBookRequestDto();
-        requestDto.setTitle(TEST_BOOK_TITLE);
-        requestDto.setAuthor(TEST_BOOK_AUTHOR);
-        requestDto.setIsbn(TEST_BOOK_ISBN_NEW);
-        requestDto.setPrice(TEST_BOOK_PRICE);
-        requestDto.setDescription(TEST_BOOK_DESCRIPTION);
-        requestDto.setCoverImage(TEST_BOOK_COVER_URL);
-        Set<Long> categoryIds = new HashSet<>();
-        requestDto.setCategoryIds(categoryIds);
-
-        BookDto expected = new BookDto();
-        expected.setCoverImage(TEST_BOOK_COVER_URL);
-        expected.setAuthor(TEST_BOOK_AUTHOR);
-        expected.setTitle(TEST_BOOK_TITLE);
-        expected.setPrice(TEST_BOOK_PRICE);
-        expected.setIsbn(TEST_BOOK_ISBN_NEW);
-        expected.setDescription(TEST_BOOK_DESCRIPTION);
-        expected.setCategoryIds(categoryIds);
-
+        CreateBookRequestDto requestDto = getTestCreateBookRequestDtoNew();
+        BookDto expected = getTestBookDtoNew();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         MvcResult result = mockMvc.perform(
@@ -136,18 +113,10 @@ public class BookControllerTest {
     @DisplayName("Find book by Id")
     public void findBookById_ValidRequest_Success() throws Exception {
         //Given
-        BookDto expected = new BookDto();
-        expected.setCoverImage(TEST_BOOK_COVER_URL);
-        expected.setAuthor(TEST_BOOK_AUTHOR);
-        expected.setTitle(TEST_BOOK_TITLE);
-        expected.setPrice(TEST_BOOK_PRICE);
-        expected.setIsbn(TEST_BOOK_ISBN);
-        expected.setDescription(TEST_BOOK_DESCRIPTION);
-        Set<Long> categoryIds = new HashSet<>();
-        expected.setCategoryIds(categoryIds);
-
+        BookDto expected = getTestBookDto();
+        Long testId = TestDataUtil.TEST_BOOK_ID;
         MvcResult result = mockMvc.perform(
-                        get("/books/" + TEST_BOOK_ID)
+                        get("/books/" + testId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isOk())
                 .andReturn();
@@ -162,8 +131,9 @@ public class BookControllerTest {
     @Test
     @DisplayName("Delete existing book")
     public void delete_anyRequest_Success() throws Exception {
+        Long testId = TestDataUtil.TEST_BOOK_ID;
         MvcResult result = mockMvc.perform(
-                        delete("/books/" + TEST_BOOK_ID)
+                        delete("/books/" + testId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isNoContent())
                 .andReturn();
@@ -174,19 +144,12 @@ public class BookControllerTest {
     @DisplayName("Search existing book")
     public void search_validRequest_Success() throws Exception {
         //Given
-        BookDto expectedBook = new BookDto();
-        expectedBook.setCoverImage(TEST_BOOK_COVER_URL);
-        expectedBook.setAuthor(TEST_BOOK_AUTHOR);
-        expectedBook.setTitle(TEST_BOOK_TITLE);
-        expectedBook.setPrice(TEST_BOOK_PRICE);
-        expectedBook.setIsbn(TEST_BOOK_ISBN);
-        expectedBook.setDescription(TEST_BOOK_DESCRIPTION);
-        Set<Long> categoryIds = new HashSet<>();
-        expectedBook.setCategoryIds(categoryIds);
+        String testBookTitle = TestDataUtil.TEST_BOOK_TITLE;
+        BookDto expectedBook = getTestBookDto();
         BookDto[] expected = new BookDto[]{expectedBook};
         MvcResult result = mockMvc.perform(
                         get("/books/search")
-                                .param("titles", TEST_BOOK_TITLE)
+                                .param("titles", testBookTitle)
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isOk())
                 .andReturn();

@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.onlinebookstore.dto.CreateCategoryRequestDto;
+import com.example.onlinebookstore.utils.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,9 +28,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CategoryControllerTest {
-    protected static MockMvc mockMvc;
-    private static final String TEST_CATEGORY_NAME = "Test Category";
-    private static final String TEST_CATEGORY_DESCRIPTION = "Test Category Description";
+    private static MockMvc mockMvc;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -67,9 +67,7 @@ public class CategoryControllerTest {
             """)
     public void save_validRequestDto_ok() throws Exception {
 
-        CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto(
-                TEST_CATEGORY_NAME,
-                TEST_CATEGORY_DESCRIPTION);
+        CreateCategoryRequestDto requestDto = TestDataUtil.getTestCategoryRequestDto();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         MvcResult result = mockMvc.perform(

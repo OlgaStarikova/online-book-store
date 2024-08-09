@@ -1,5 +1,9 @@
 package com.example.onlinebookstore.service;
 
+import static com.example.onlinebookstore.utils.TestDataUtil.TEST_BOOK_ID;
+import static com.example.onlinebookstore.utils.TestDataUtil.getTestBook;
+import static com.example.onlinebookstore.utils.TestDataUtil.getTestBookDto;
+import static com.example.onlinebookstore.utils.TestDataUtil.getTestCreateBookRequestDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -9,15 +13,11 @@ import com.example.onlinebookstore.dto.CreateBookRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.BookMapper;
 import com.example.onlinebookstore.model.Book;
-import com.example.onlinebookstore.model.Category;
 import com.example.onlinebookstore.repository.CategoryRepository;
 import com.example.onlinebookstore.repository.book.BookRepository;
 import com.example.onlinebookstore.repository.book.BookSpecificationBuilder;
 import com.example.onlinebookstore.service.impl.BookServiceImpl;
-import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,15 +30,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
-    private static final Long TEST_BOOK_ID = 1L;
-    private static final String TEST_BOOK_TITLE = "Test Book 1";
-    private static final String TEST_BOOK_AUTHOR = "Test Author 1";
-    private static final String TEST_BOOK_ISBN = "978-1-52910-949-1";
-    private static final BigDecimal TEST_BOOK_PRICE = BigDecimal.valueOf(20);
-    private static final String TEST_BOOK_DESCRIPTION = "Test Description";
-    private static final String TEST_BOOK_COVER_URL = "'url://testbook_cover.jpg'";
-    private static final Long TEST_CATEGORY_ID = 1L;
-    private static final String TEST_CATEGORY_NAME = "Test category";
     @Mock
     private BookRepository bookRepository;
 
@@ -57,8 +48,6 @@ public class BookServiceTest {
     private CreateBookRequestDto requestDto;
     private Book book;
     private BookDto bookDto;
-    private Set<Category> categories = new HashSet<>();
-    private Set<Long> categoryIds = new HashSet<>();
 
     @BeforeEach
     @Sql(scripts = {
@@ -67,39 +56,9 @@ public class BookServiceTest {
             "classpath:database/categories/remove_category_from_categories_table.sql"
     })
     void setUp() {
-        categoryIds.add(TEST_CATEGORY_ID);
-        requestDto = new CreateBookRequestDto()
-                .setTitle(TEST_BOOK_TITLE)
-                .setAuthor(TEST_BOOK_AUTHOR)
-                .setIsbn(TEST_BOOK_ISBN)
-                .setPrice(TEST_BOOK_PRICE)
-                .setDescription(TEST_BOOK_DESCRIPTION)
-                .setCoverImage(TEST_BOOK_COVER_URL)
-                .setCategoryIds(categoryIds);
-
-        Category category = new Category();
-        category.setId(TEST_CATEGORY_ID);
-        category.setName(TEST_CATEGORY_NAME);
-        categories.add(category);
-
-        book = new Book();
-        book.setId(TEST_BOOK_ID);
-        book.setTitle(requestDto.getTitle());
-        book.setAuthor(requestDto.getAuthor());
-        book.setIsbn(requestDto.getIsbn());
-        book.setPrice(requestDto.getPrice());
-        book.setDescription(requestDto.getDescription());
-        book.setCoverImage(requestDto.getCoverImage());
-        book.setCategories(categories);
-
-        bookDto = new BookDto()
-                .setTitle(requestDto.getTitle())
-                .setAuthor(requestDto.getAuthor())
-                .setIsbn(requestDto.getIsbn())
-                .setPrice(requestDto.getPrice())
-                .setDescription(requestDto.getDescription())
-                .setCoverImage(requestDto.getCoverImage())
-                .setCategoryIds(requestDto.getCategoryIds());
+        requestDto = getTestCreateBookRequestDto();
+        book = getTestBook();
+        bookDto = getTestBookDto();
     }
 
     @Test

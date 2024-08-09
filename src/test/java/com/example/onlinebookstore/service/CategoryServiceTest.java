@@ -12,6 +12,7 @@ import com.example.onlinebookstore.mapper.CategoryMapper;
 import com.example.onlinebookstore.model.Category;
 import com.example.onlinebookstore.repository.CategoryRepository;
 import com.example.onlinebookstore.service.impl.CategoryServiceImpl;
+import com.example.onlinebookstore.utils.TestDataUtil;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -29,9 +30,6 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
-    private static final Long TEST_CATEGORY_ID = 1L;
-    private static final String TEST_CATEGORY_NAME = "Test Category";
-    private static final String TEST_CATEGORY_DESCRIPTION = "Test Category Description";
     @Mock
     private CategoryRepository categoryRepository;
 
@@ -46,14 +44,9 @@ public class CategoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        category = new Category();
-        category.setId(TEST_CATEGORY_ID);
-        category.setName(TEST_CATEGORY_NAME);
-        category.setDescription(TEST_CATEGORY_DESCRIPTION);
-
-        categoryDto = new CategoryDto(TEST_CATEGORY_NAME, TEST_CATEGORY_DESCRIPTION);
-        createCategoryRequestDto = new CreateCategoryRequestDto(TEST_CATEGORY_NAME,
-                TEST_CATEGORY_DESCRIPTION);
+        category = TestDataUtil.getTestCategory();
+        categoryDto = TestDataUtil.getTestCategoryDto();
+        createCategoryRequestDto = TestDataUtil.getTestCategoryRequestDto();
     }
 
     @Test
@@ -105,9 +98,10 @@ public class CategoryServiceTest {
             Test update method, valid result
             """)
     public void update_validParameters_ok() {
+        Long testId = TestDataUtil.TEST_CATEGORY_ID;
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
-        categoryService.update(TEST_CATEGORY_ID, createCategoryRequestDto);
+        categoryService.update(testId, createCategoryRequestDto);
 
         verify(categoryRepository, times(1)).save(category);
     }
@@ -117,7 +111,8 @@ public class CategoryServiceTest {
             Test deleteById method, valid result
             """)
     public void deleteById_validParameters_ok() {
-        categoryService.deleteById(TEST_CATEGORY_ID);
-        verify(categoryRepository, times(1)).deleteById(TEST_CATEGORY_ID);
+        Long testId = TestDataUtil.TEST_CATEGORY_ID;
+        categoryService.deleteById(testId);
+        verify(categoryRepository, times(1)).deleteById(testId);
     }
 }

@@ -1,121 +1,113 @@
 package com.example.onlinebookstore.utils;
 
 import com.example.onlinebookstore.dto.BookDto;
-import com.example.onlinebookstore.dto.BookDtoWithoutCategoryIds;
 import com.example.onlinebookstore.dto.CategoryDto;
 import com.example.onlinebookstore.dto.CreateBookRequestDto;
 import com.example.onlinebookstore.dto.CreateCategoryRequestDto;
+import com.example.onlinebookstore.model.Book;
+import com.example.onlinebookstore.model.Category;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TestDataUtil {
-    private static final CreateBookRequestDto createBookRequestDto = new CreateBookRequestDto()
-            .setTitle("Test Title")
-            .setAuthor("Test Author")
-            .setIsbn("ISBN 978-5-901202-50-5")
-            .setPrice(BigDecimal.valueOf(50))
-            .setCoverImage("url://TestCoverImage");
-    private static final BookDto bookDto = new BookDto()
-            .setTitle("Test Title")
-            .setAuthor("Test Author")
-            .setIsbn("ISBN 978-5-901202-50-5")
-            .setPrice(BigDecimal.valueOf(50))
-            .setCoverImage("url://TestCoverImage");
-    private static final BookDto javaBookDto = new BookDto()
-            .setTitle("Mastering Java")
-            .setAuthor("Jane Smith")
-            .setIsbn("ISBN 978-5-901202-50-5")
-            .setPrice(BigDecimal.valueOf(39.99))
-            .setDescription("An advanced guide to Java programming")
-            .setCoverImage("url://mastering_java_cover.jpg")
-            .setCategoryIds(Collections.emptySet());
-    private static final BookDto springBookDto = new BookDto()
-            .setTitle("Learning Spring Boot")
-            .setAuthor("John Doe")
-            .setIsbn("ISBN 978-5-901202-50-5")
-            .setPrice(BigDecimal.valueOf(29.99))
-            .setDescription("A comprehensive guide to Spring Boot")
-            .setCoverImage("url://spring_boot_cover.jpg")
-            .setCategoryIds(Collections.emptySet());
-    private static final BookDto hibernateBookDto = new BookDto()
-            .setTitle("Learning Hibernate")
-            .setAuthor("Jack Hobbit")
-            .setIsbn("9781234567895")
-            .setPrice(BigDecimal.valueOf(59.99))
-            .setDescription("A comprehensive guide to Hibernate")
-            .setCoverImage("url://hibernate_cover.jpg")
-            .setCategoryIds(Collections.emptySet());
-    private static final CategoryDto fantasyCategoryDto = new CategoryDto(
-            "Fantasy",
-            "Books about fantastic worlds");
-    private static final CategoryDto horrorCategoryDto = new CategoryDto(
-            "Horror",
-            "Very scared books");
-    private static final CategoryDto romanticCategoryDto = new CategoryDto(
-            "Romantic",
-            "Beautiful books with love");
+    public static final Long TEST_BOOK_ID = 1L;
+    public static final String TEST_BOOK_TITLE = "Test Book 1";
+    public static final String TEST_BOOK_AUTHOR = "Test Author 1";
+    public static final String TEST_BOOK_ISBN = "ISBN 978-5-901202-50-5";
+    public static final String TEST_BOOK_ISBN_NEW = "ISBN 978-5-901202-50-6";
+    public static final BigDecimal TEST_BOOK_PRICE = BigDecimal.valueOf(20);
+    public static final String TEST_BOOK_DESCRIPTION = "Test Description";
+    public static final String TEST_BOOK_COVER_URL = "url://testbook_cover.jpg";
+    public static final Long TEST_CATEGORY_ID = 1L;
+    public static final String TEST_CATEGORY_NAME = "Test category";
+    public static final Set<Long> CATEGORY_IDS = new HashSet<>();
+    private static CreateBookRequestDto createBookRequestDto = new CreateBookRequestDto()
+            .setTitle(TEST_BOOK_TITLE)
+            .setAuthor(TEST_BOOK_AUTHOR)
+            .setIsbn(TEST_BOOK_ISBN)
+            .setPrice(TEST_BOOK_PRICE)
+            .setDescription(TEST_BOOK_DESCRIPTION)
+            .setCoverImage(TEST_BOOK_COVER_URL);
+
+    private static CreateBookRequestDto createBookRequestDtoNew = new CreateBookRequestDto()
+            .setTitle(TEST_BOOK_TITLE)
+            .setAuthor(TEST_BOOK_AUTHOR)
+            .setIsbn(TEST_BOOK_ISBN_NEW)
+            .setPrice(TEST_BOOK_PRICE)
+            .setDescription(TEST_BOOK_DESCRIPTION)
+            .setCoverImage(TEST_BOOK_COVER_URL);
+    private static BookDto bookDto = new BookDto()
+            .setTitle(TEST_BOOK_TITLE)
+            .setAuthor(TEST_BOOK_AUTHOR)
+            .setIsbn(TEST_BOOK_ISBN)
+            .setPrice(TEST_BOOK_PRICE)
+            .setDescription(TEST_BOOK_DESCRIPTION)
+            .setCoverImage(TEST_BOOK_COVER_URL)
+            .setCategoryIds(CATEGORY_IDS);
+
+    private static BookDto bookDtoNew = new BookDto()
+            .setTitle(TEST_BOOK_TITLE)
+            .setAuthor(TEST_BOOK_AUTHOR)
+            .setIsbn(TEST_BOOK_ISBN_NEW)
+            .setPrice(TEST_BOOK_PRICE)
+            .setDescription(TEST_BOOK_DESCRIPTION)
+            .setCoverImage(TEST_BOOK_COVER_URL)
+            .setCategoryIds(CATEGORY_IDS);
+
+    private static final Category category = new Category()
+            .setId(TEST_CATEGORY_ID)
+            .setName(TEST_CATEGORY_NAME)
+            .setDescription(TEST_BOOK_DESCRIPTION);
+
+    private static final Set<Category> CATEGORIES = new HashSet<>();
+
+    private static Book book = new Book()
+            .setTitle(TEST_BOOK_TITLE)
+            .setAuthor(TEST_BOOK_AUTHOR)
+            .setIsbn(TEST_BOOK_ISBN)
+            .setPrice(TEST_BOOK_PRICE)
+            .setDescription(TEST_BOOK_DESCRIPTION)
+            .setCoverImage(TEST_BOOK_COVER_URL)
+            .setCategories(CATEGORIES);
+
+    private static CategoryDto categoryDto = new CategoryDto(
+            TEST_CATEGORY_NAME,
+            TEST_BOOK_DESCRIPTION);
+
+    private static CreateCategoryRequestDto categoryRequestDto = new CreateCategoryRequestDto(
+            TEST_CATEGORY_NAME,
+            TEST_BOOK_DESCRIPTION);
 
     public static CreateBookRequestDto getTestCreateBookRequestDto() {
         return createBookRequestDto;
+    }
+
+    public static CreateBookRequestDto getTestCreateBookRequestDtoNew() {
+        return createBookRequestDtoNew;
     }
 
     public static BookDto getTestBookDto() {
         return bookDto;
     }
 
-    public static List<BookDto> getThreeDefaultBookDto() {
-        List<BookDto> expected = new ArrayList<>();
-        expected.add(javaBookDto);
-        expected.add(springBookDto);
-        expected.add(hibernateBookDto);
-        return expected;
+    public static BookDto getTestBookDtoNew() {
+        return bookDtoNew;
     }
 
-    public static List<BookDtoWithoutCategoryIds> getThreeDefaultBookDtoWithoutCategoryIds() {
-        List<BookDtoWithoutCategoryIds> expected = new ArrayList<>();
-        expected.add(new BookDtoWithoutCategoryIds()
-                .setTitle(javaBookDto.getTitle())
-                .setAuthor(javaBookDto.getAuthor())
-                .setIsbn(javaBookDto.getIsbn())
-                .setPrice(javaBookDto.getPrice())
-                .setDescription(javaBookDto.getDescription())
-                .setCoverImage(javaBookDto.getCoverImage()));
-
-        expected.add(new BookDtoWithoutCategoryIds()
-                .setTitle(springBookDto.getTitle())
-                .setAuthor(springBookDto.getAuthor())
-                .setIsbn(springBookDto.getIsbn())
-                .setPrice(springBookDto.getPrice())
-                .setDescription(springBookDto.getDescription())
-                .setCoverImage(springBookDto.getCoverImage()));
-
-        expected.add(new BookDtoWithoutCategoryIds()
-                .setTitle(hibernateBookDto.getTitle())
-                .setAuthor(hibernateBookDto.getAuthor())
-                .setIsbn(hibernateBookDto.getIsbn())
-                .setPrice(hibernateBookDto.getPrice())
-                .setDescription(hibernateBookDto.getDescription())
-                .setCoverImage(hibernateBookDto.getCoverImage()));
-        return expected;
+    public static Book getTestBook() {
+        return book;
     }
 
-    public static List<CategoryDto> getThreeDefaultCategoryDto() {
-        List<CategoryDto> expected = new ArrayList<>();
-        expected.add(fantasyCategoryDto);
-        expected.add(horrorCategoryDto);
-        expected.add(romanticCategoryDto);
-        return expected;
+    public static Category getTestCategory() {
+        return category;
     }
 
-    public static CategoryDto getTestFantasyCategoryDto() {
-        return fantasyCategoryDto;
+    public static CategoryDto getTestCategoryDto() {
+        return categoryDto;
     }
 
-    public static CreateCategoryRequestDto getTestCreateCategoryRequestDto() {
-        return new CreateCategoryRequestDto(
-                fantasyCategoryDto.name(),
-                fantasyCategoryDto.description());
+    public static CreateCategoryRequestDto getTestCategoryRequestDto() {
+        return categoryRequestDto;
     }
 }
