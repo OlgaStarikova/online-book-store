@@ -32,3 +32,10 @@ So,
 </ul>
 </li>
 </ul>
+<h2>Example</h2>
+The project was launched on AWS
+You can test it using this Login and Password: 
+{
+  "email": "User@gmail.com",
+  "password": "123456789"
+}
