@@ -4,7 +4,7 @@
 <ul style="list-style-type: disc;">
 <li>
 <h3>What is it?</h3>
-<br /> This is the Web application.<br />This project was created as an example of online store. It provides the main backend functionality of the e - shop.
+This is the Web application.<br />This project was created as an example of online store. It provides the main backend functionality of the e - shop.
 <blockquote>The main goal of creating the project was to master the tools of Java in the process of the building all its components from scratch.</blockquote>
 </li>
 <li>
