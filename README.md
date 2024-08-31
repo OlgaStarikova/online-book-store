@@ -34,6 +34,7 @@ So,
 </ul>
 <h2>Example</h2>
 The project was launched on AWS
+http://ec2-54-235-185-184.compute-1.amazonaws.com/swagger-ui/index.html
 You can test it using this Login and Password: 
 {
   "email": "User@gmail.com",
