@@ -1,6 +1,4 @@
 <h1><strong>Online Book Store</strong></h1>
-was written by Starikova Olga
-while studying at the Mate academy course Java
 
 <h2>Introduction</h2>
 <ul style="list-style-type: disc;">
