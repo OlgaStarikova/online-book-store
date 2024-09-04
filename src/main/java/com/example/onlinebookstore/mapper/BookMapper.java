@@ -7,6 +7,7 @@ import com.example.onlinebookstore.dto.CreateBookRequestDto;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.model.Category;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -30,6 +31,16 @@ public interface BookMapper {
             bookDto.setCategoryIds(book.getCategories().stream()
                     .map(Category::getId)
                     .collect(Collectors.toSet()));
+        }
+    }
+
+    @AfterMapping
+    default void setCategories(@MappingTarget Book book,CreateBookRequestDto requestDto) {
+        if (requestDto.getCategoryIds() != null) {
+            Set<Category> categories = requestDto.getCategoryIds().stream()
+                    .map(Category::new)
+                    .collect(Collectors.toSet());
+            book.setCategories(categories);
         }
     }
 }
