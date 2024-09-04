@@ -29,6 +29,7 @@ So,
 <li>All work with this project had been doing in IntelliJ IDEA IDE</li>
 <li>Building with Maven</li>
 <li>Transfering to GitHub for consultation with mentors.</li>
+<li>Launched on AWS service EC2.</li> 
 </ul>
 </li>
 </ul>
@@ -40,3 +41,14 @@ You can test it using this Login and Password:
   "email": "User@gmail.com",
   "password": "123456789"
 }
+This video will help you understand what you need to do to log in:
+
+https://github.com/user-attachments/assets/9b209410-33da-451a-8656-c50ed69fd5eb
+
+Authorization is necessary for getting access to data.
+
+For an example of how to make a request, watch this video:
+
+https://github.com/user-attachments/assets/19caabe5-7ec2-4904-9d24-59b6823a71f0
+
+
