@@ -1,7 +1,7 @@
 # **Online Book Store**
 ___
 ## Introduction
-___
+
 ### What is it?
 This is the Web application.<br />This project  provides the main backend functionality of the **e - shop**.
 >_The main goal of creating the project was to master the tools of Java in the process of the building all its components from scratch._
@@ -13,8 +13,6 @@ Bookstore is a web application that enables online selection and purchase of boo
 >**USER ROLE** Using this platform, users can browse the catalog of books and search for books by various criteria. After registration, users can add to the cart and order books.
 
 ## Technologies and Tools used
-___
-
 So,
 
 + **Java 17** Project is relazed on Java 17 
@@ -84,6 +82,9 @@ So,
 | PUT         | `/cart/items/{id}` | Update quantity of one specific book in the cart |
 | DELETE      | `/cart/items/{id}` | Delete cart item from users shopping cart        |
 
+## DataBase Diagramm
+
+![BookStoreDb](https://github.com/user-attachments/assets/e846edf7-4357-4691-91c0-264cc5b99dc4)
 
 ## Example
 The project was launched on AWS
