@@ -85,8 +85,46 @@ So,
 ## DataBase Diagramm
 
 ![BookStoreDb](https://github.com/user-attachments/assets/e846edf7-4357-4691-91c0-264cc5b99dc4)
+## Getting started
+### Prerequisites
 
-## Example
+Before you begin, ensure you have met the following requirements:
+
+- [Docker](https://www.docker.com/get-started) installed on your machine.
+- [Docker Compose](https://docs.docker.com/compose/install/) installed.
+### Installation
+1. **Clone the Repository**:
+
+    ```sh
+    git clone https://github.com/OlgaStarikova/online-book-store.git
+    cd online-book-store
+    ```
+
+2. **Configure Environment Variables**:
+
+   Customize the `.env` file to set up your environment-specific variables such as database credentials, JWT secret keys, etc. This allows you to connect to your own database or adjust configurations as needed.
+
+
+3. **Set Up the Environment**:
+
+   Ensure Docker and Docker Compose are installed on your system. You can configure environment variables directly in the `docker-compose.yml` file.
+
+
+4. **Build and Run the Application**:
+
+    ```sh
+    docker-compose up --build
+    ```
+
+5. **Access the Application**:
+
+   The application will be available at `http://localhost:8088/api`.
+
+
+6. **API Documentation**:
+
+   Access the API documentation via Swagger at `http://localhost:8088/api/swagger-ui/index.html#/`.
+## AWS
 The project was launched on AWS
 http://ec2-54-235-185-184.compute-1.amazonaws.com/swagger-ui/index.html
 You can test it using this Login and Password: 
