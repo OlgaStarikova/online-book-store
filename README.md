@@ -128,10 +128,13 @@ Before you begin, ensure you have met the following requirements:
 The project was launched on AWS
 http://ec2-54-235-185-184.compute-1.amazonaws.com/swagger-ui/index.html
 You can test it using this Login and Password: 
+```json
 {
   "email": "User@gmail.com",
   "password": "123456789"
 }
+```
+
 This video will help you understand what you need to do to log in:
 
 https://github.com/user-attachments/assets/9b209410-33da-451a-8656-c50ed69fd5eb
