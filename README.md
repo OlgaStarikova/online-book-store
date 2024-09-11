@@ -85,7 +85,7 @@ So,
 ## DataBase Diagramm
 
 ![BookStoreDb](https://github.com/user-attachments/assets/e846edf7-4357-4691-91c0-264cc5b99dc4)
-## Getting started
+## Getting started local
 ### Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -109,31 +109,50 @@ Before you begin, ensure you have met the following requirements:
 
    Ensure Docker and Docker Compose are installed on your system. You can configure environment variables directly in the `docker-compose.yml` file.
 
-
 4. **Build and Run the Application**:
 
     ```sh
-    docker-compose up --build
+    docker-compose build
+    docker-compose up
     ```
 
 5. **Access the Application**:
 
    The application will be available at `http://localhost:8088/api`.
 
-
 6. **API Documentation**:
 
    Access the API documentation via Swagger at `http://localhost:8088/api/swagger-ui/index.html#/`.
+7. **Postman**
+   Use a Postman for generate queries
+   Login to application
+    https://github.com/user-attachments/assets/49405c03-49c9-4006-bc3a-699aedcceb44
+   Get all books
+   https://github.com/user-attachments/assets/122c808a-f35a-46cc-8a37-d8d510f2d183
+
+
+   
 ## AWS
+### How you can test deployed instance of the application on AWS
 The project was launched on AWS
 http://ec2-54-235-185-184.compute-1.amazonaws.com/swagger-ui/index.html
-You can test it using this Login and Password: 
+
+You can test it as Admin using this Login and Password: 
+```json
+{
+  "email": "Admin@gmail.com",
+  "password": "12345678"
+}
+```
+
+You can test it as User using this Login and Password: 
 ```json
 {
   "email": "User@gmail.com",
   "password": "123456789"
 }
 ```
+
 
 This video will help you understand what you need to do to log in:
 
