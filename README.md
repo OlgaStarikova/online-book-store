@@ -85,7 +85,8 @@ So,
 ## DataBase Diagramm
 
 ![BookStoreDb](https://github.com/user-attachments/assets/e846edf7-4357-4691-91c0-264cc5b99dc4)
-## Getting started local
+
+## Getting started local 
 ### Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -135,7 +136,7 @@ Before you begin, ensure you have met the following requirements:
    
     https://github.com/user-attachments/assets/49405c03-49c9-4006-bc3a-699aedcceb44
    
-  +  Get all books
+   + Get all books
     
    https://github.com/user-attachments/assets/122c808a-f35a-46cc-8a37-d8d510f2d183
 
@@ -144,8 +145,9 @@ Before you begin, ensure you have met the following requirements:
 ## AWS
 ### You can test deployed instance of the application on AWS!
 
-The project has the launched example on AWS
-http://ec2-54-235-185-184.compute-1.amazonaws.com/swagger-ui/index.html
+The project has the launched example on AWS:
+
+[Online Book Store on AWS](http://ec2-54-235-185-184.compute-1.amazonaws.com/swagger-ui/index.html)
 
 To login with an Admin authority, use this Login and Password: 
 ```json
@@ -164,13 +166,13 @@ To login with an User authority, use this Login and Password:
 ```
 
   ***Tutorial video for Swagger using***
-+This video will help you understand what you need to do to log in:
++ This video will help you to understand what you need to do to log in:
 
 https://github.com/user-attachments/assets/9b209410-33da-451a-8656-c50ed69fd5eb
 
 Authorization is necessary for getting access to data.
 
-+For an example of how to make a request, watch this video:
++ This video will help you to make a request:
 
 https://github.com/user-attachments/assets/19caabe5-7ec2-4904-9d24-59b6823a71f0
 
