@@ -125,8 +125,16 @@ Before you begin, ensure you have met the following requirements:
    Access the API documentation via Swagger at `http://localhost:8088/api/swagger-ui/index.html#/`.
 7. **Postman**
    Use a Postman for generate queries
+   You can download the collection of postman's queries here:
+  
+
+   [BooksOnlineStore.postman_collection.json](https://github.com/user-attachments/files/17005904/BooksOnlineStore.postman_collection.json)
+
+   
    Login to application
+   
     https://github.com/user-attachments/assets/49405c03-49c9-4006-bc3a-699aedcceb44
+   
    Get all books
    https://github.com/user-attachments/assets/122c808a-f35a-46cc-8a37-d8d510f2d183
 
@@ -164,4 +172,9 @@ For an example of how to make a request, watch this video:
 
 https://github.com/user-attachments/assets/19caabe5-7ec2-4904-9d24-59b6823a71f0
 
+## Contact
 
+For any questions or suggestions, feel free to reach out:
+
+- GitHub: [OlgaStarikova](https://github.com/OlgaStarikova)
+- email: ole4kastar79@gmail.com
