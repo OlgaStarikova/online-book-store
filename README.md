@@ -3,7 +3,7 @@ ___
 ## Introduction
 
 ### What is it?
-This is the Web application.<br />This project  provides the main backend functionality of the **e - shop**.
+This is the Web application powered by Java Spring Boot.<br />This project  provides the main backend functionality of the **e - shop**.
 >_The main goal of creating the project was to master the tools of Java in the process of the building all its components from scratch._
 
 ### What does it can?
