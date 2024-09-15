@@ -123,29 +123,31 @@ Before you begin, ensure you have met the following requirements:
 6. **API Documentation**:
 
    Access the API documentation via Swagger at `http://localhost:8088/api/swagger-ui/index.html#/`.
-7. **Postman**
+   
+8. **Postman**
    Use a Postman for generate queries
    You can download the collection of postman's queries here:
   
-
    [BooksOnlineStore.postman_collection.json](https://github.com/user-attachments/files/17005904/BooksOnlineStore.postman_collection.json)
 
-   
-   Login to application
+   ***Tutorial video for Postman using***
+   + Login to application
    
     https://github.com/user-attachments/assets/49405c03-49c9-4006-bc3a-699aedcceb44
    
-   Get all books
+  +  Get all books
+    
    https://github.com/user-attachments/assets/122c808a-f35a-46cc-8a37-d8d510f2d183
 
 
    
 ## AWS
-### How you can test deployed instance of the application on AWS
-The project was launched on AWS
+### You can test deployed instance of the application on AWS!
+
+The project has the launched example on AWS
 http://ec2-54-235-185-184.compute-1.amazonaws.com/swagger-ui/index.html
 
-You can test it as Admin using this Login and Password: 
+To login with an Admin authority, use this Login and Password: 
 ```json
 {
   "email": "Admin@gmail.com",
@@ -153,7 +155,7 @@ You can test it as Admin using this Login and Password:
 }
 ```
 
-You can test it as User using this Login and Password: 
+To login with an User authority, use this Login and Password: 
 ```json
 {
   "email": "User@gmail.com",
@@ -161,14 +163,14 @@ You can test it as User using this Login and Password:
 }
 ```
 
-
-This video will help you understand what you need to do to log in:
+  ***Tutorial video for Swagger using***
++This video will help you understand what you need to do to log in:
 
 https://github.com/user-attachments/assets/9b209410-33da-451a-8656-c50ed69fd5eb
 
 Authorization is necessary for getting access to data.
 
-For an example of how to make a request, watch this video:
++For an example of how to make a request, watch this video:
 
 https://github.com/user-attachments/assets/19caabe5-7ec2-4904-9d24-59b6823a71f0
 
