@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Schema(description = "Book response DTO")
 public class BookDto {
+    private Long id;
     private String title;
     private String author;
     private String isbn;

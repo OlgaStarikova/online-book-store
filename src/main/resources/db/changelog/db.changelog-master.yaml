@@ -25,3 +25,5 @@ databaseChangeLog:
       file: db/changelog/changes/12-create-order-table.yml
   - include:
       file: db/changelog/changes/13-create-ordertitem-table.yml
+  - include:
+      file: db/changelog/changes/14-alter-book-cover-image.yml

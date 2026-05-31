@@ -22,6 +22,7 @@ public class TestDataUtil {
     public static final Long TEST_CATEGORY_ID = 1L;
     public static final String TEST_CATEGORY_NAME = "Test category";
     public static final Set<Long> CATEGORY_IDS = new HashSet<>();
+
     private static CreateBookRequestDto createBookRequestDto = new CreateBookRequestDto()
             .setTitle(TEST_BOOK_TITLE)
             .setAuthor(TEST_BOOK_AUTHOR)

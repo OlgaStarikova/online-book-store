@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter-book-cover-image-to-mediumtext
+      author: Olya Starykova
+      changes:
+        - modifyDataType:
+            tableName: books
+            columnName: cover_image
+            newDataType: MEDIUMTEXT

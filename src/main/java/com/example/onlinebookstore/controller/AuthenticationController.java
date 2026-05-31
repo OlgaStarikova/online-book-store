@@ -6,6 +6,8 @@ import com.example.onlinebookstore.dto.UserLoginResponseDto;
 import com.example.onlinebookstore.dto.UserRegistrationRequestDto;
 import com.example.onlinebookstore.dto.UserResponseDto;
 import com.example.onlinebookstore.exception.RegistrationException;
+import com.example.onlinebookstore.mapper.UserMapper;
+import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.security.AuthenticationService;
 import com.example.onlinebookstore.service.BookService;
 import com.example.onlinebookstore.service.UserService;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +34,7 @@ public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final BookService bookService;
+    private final UserMapper userMapper;
 
     @Operation(summary = "Register a new user", description = "Registration "
             + " a user for a access to data")
@@ -45,6 +49,13 @@ public class AuthenticationController {
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
         return authenticationService.authenticate(requestDto);
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Get current user info")
+    public UserResponseDto me(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return userMapper.toDto(user);
     }
 
     @GetMapping("/getbooks")
