@@ -18,9 +18,45 @@ services:
     volumes:
       - my-datavolume:/var/lib/mysql
 
+  minio:
+    image: minio/minio:latest
+    restart: on-failure
+    command: server /data --console-address ":9090"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - miniodata:/data
+    ports:
+      - "9100:9000"
+      - "9101:9090"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9000/minio/health/live || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD &&
+      mc mb --ignore-existing local/book-covers &&
+      mc anonymous set download local/book-covers
+      "
+    restart: "no"
+
   app:
     depends_on:
       mysqldb:
+        condition: service_healthy
+      minio:
         condition: service_healthy
     restart: on-failure
     image: online-book-store
@@ -29,8 +65,6 @@ services:
     ports:
       - "$SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT"
       - "$DEBUG_PORT:$DEBUG_PORT"
-    volumes:
-      - uploads-data:/uploads
     environment:
       SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:${MYSQLDB_DOCKER_PORT}/${MYSQLDB_DATABASE}?enabledTLSProtocols=TLSv1.2"
       SPRING_DATASOURCE_USERNAME: $MYSQLDB_USER
@@ -44,7 +78,11 @@ services:
       JWT_EXPIRATION: "1500000"
       JWT_SECRET: BookOnlineSecrete1254882566MateAcademy9954365Code
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT"
+      APP_STORAGE_ENDPOINT: "http://minio:9000"
+      APP_STORAGE_PUBLIC_URL: "http://localhost:9100"
+      APP_STORAGE_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      APP_STORAGE_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
 
 volumes:
   my-datavolume:
-  uploads-data:
+  miniodata:
