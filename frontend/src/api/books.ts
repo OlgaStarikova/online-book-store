@@ -1,7 +1,7 @@
 import client from './client';
 import type { BookDto } from '../types';
 
-export const getBooks = (page = 0, size = 12) =>
+export const getBooks = (page = 0, size = 50) =>
   client.get<BookDto[]>('/books', { params: { page, size } });
 
 export const getBook = (id: number) =>
