@@ -73,6 +73,7 @@ public class TestDataUtil {
             .setCategories(CATEGORIES);
 
     private static CategoryDto categoryDto = new CategoryDto(
+            null,
             TEST_CATEGORY_NAME,
             TEST_BOOK_DESCRIPTION);
 

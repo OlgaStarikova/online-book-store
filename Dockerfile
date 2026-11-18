@@ -1,16 +1,23 @@
-# Builder stage
+# Stage 1: build with Maven
 FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /online-book-store
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} online-book-store.jar
-RUN java -Djarmode=layertools -jar online-book-store.jar extract
+COPY pom.xml .
+COPY checkstyle.xml .
+COPY src ./src
+RUN apk add --no-cache maven && mvn package -DskipTests
 
-# Final stage
+# Stage 2: extract layers
+FROM eclipse-temurin:17-jdk-alpine AS layers
+WORKDIR /online-book-store
+COPY --from=builder /online-book-store/target/*.jar app.jar
+RUN java -Djarmode=layertools -jar app.jar extract
+
+# Stage 3: final image
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /online-book-store
-COPY --from=builder online-book-store/dependencies/ ./
-COPY --from=builder online-book-store/spring-boot-loader/ ./
-COPY --from=builder online-book-store/snapshot-dependencies/ ./
-COPY --from=builder online-book-store/application/ ./
+COPY --from=layers /online-book-store/dependencies/ ./
+COPY --from=layers /online-book-store/spring-boot-loader/ ./
+COPY --from=layers /online-book-store/snapshot-dependencies/ ./
+COPY --from=layers /online-book-store/application/ ./
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
 EXPOSE 8080
