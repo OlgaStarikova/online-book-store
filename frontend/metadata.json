@@ -1,0 +1,6 @@
+{
+  "name": "The Bookery Online Store UI",
+  "description": "A modern React frontend prototype for a Spring Boot online bookstore backend.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
