@@ -39,6 +39,7 @@ public class TestDataUtil {
             .setDescription(TEST_BOOK_DESCRIPTION)
             .setCoverImage(TEST_BOOK_COVER_URL);
     private static BookDto bookDto = new BookDto()
+            .setId(TEST_BOOK_ID)
             .setTitle(TEST_BOOK_TITLE)
             .setAuthor(TEST_BOOK_AUTHOR)
             .setIsbn(TEST_BOOK_ISBN)

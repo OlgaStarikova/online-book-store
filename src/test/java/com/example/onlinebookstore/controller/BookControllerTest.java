@@ -87,7 +87,8 @@ public class BookControllerTest {
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
         Assertions.assertNotNull(actual);
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertNotNull(actual.getId());
+        Assertions.assertEquals(expected, actual.setId(null));
     }
 
     @WithMockUser(username = "User", authorities = {"USER"})
